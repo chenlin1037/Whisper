@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		04B3DABB2F24F25700642C20 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 04B3DABA2F24F25700642C20 /* Localizable.xcstrings */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		04B3DA052F1FE55C00642C20 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,6 +31,7 @@
 		04B3D9F72F1FE55A00642C20 /* Whisper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Whisper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		04B3DA042F1FE55C00642C20 /* WhisperTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WhisperTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		04B3DA0E2F1FE55C00642C20 /* WhisperUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WhisperUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		04B3DABA2F24F25700642C20 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -75,6 +80,7 @@
 		04B3D9EE2F1FE55A00642C20 = {
 			isa = PBXGroup;
 			children = (
+				04B3DABA2F24F25700642C20 /* Localizable.xcstrings */,
 				04B3D9F92F1FE55A00642C20 /* Whisper */,
 				04B3DA072F1FE55C00642C20 /* WhisperTests */,
 				04B3DA112F1FE55C00642C20 /* WhisperUITests */,
@@ -187,11 +193,12 @@
 				};
 			};
 			buildConfigurationList = 04B3D9F22F1FE55A00642C20 /* Build configuration list for PBXProject "Whisper" */;
-			developmentRegion = en;
+			developmentRegion = "zh-Hans";
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = 04B3D9EE2F1FE55A00642C20;
 			minimizedProjectReferenceProxies = 1;
@@ -212,6 +219,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04B3DABB2F24F25700642C20 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -329,6 +337,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -386,6 +395,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

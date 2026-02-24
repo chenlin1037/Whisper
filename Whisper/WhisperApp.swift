@@ -11,7 +11,11 @@ import SwiftUI
 struct WhisperApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainTabView()
+                .tint(Color.appTheme)
+                .applyTheme()
+                .environment(\.themeManager, ThemeManager.shared)
+                .applyLanguage()
         }
     }
 }
