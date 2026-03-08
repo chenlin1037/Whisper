@@ -104,7 +104,6 @@ struct MixSoundView: View {
                             sounds: viewModel.soundsForMix(mix),
                             onPlay: {
                                 viewModel.play(mix)
-//                                playingBarVM.updateSounds(AllSoundManger.shared.sounds)
                             },
                             onEdit: {
                                 viewModel.startEditing(mix)
@@ -117,6 +116,9 @@ struct MixSoundView: View {
                             },
                             onDelete: {
                                 viewModel.delete(mix)
+                            },
+                            onTogglePin: {
+                                viewModel.togglePin(mix)
                             }
                         )
                     }
@@ -234,6 +236,7 @@ struct MixCard: View {
     let onEdit: () -> Void
     let onDetail: () -> Void
     let onDelete: () -> Void
+    let onTogglePin: () -> Void
 
     @State private var showDeleteAlert = false
 
@@ -272,6 +275,18 @@ struct MixCard: View {
             .buttonStyle(.plain)
 
             Spacer()
+
+            // 置顶按钮
+            Button {
+                HapticFeedback.impact(style: .light)
+                onTogglePin()
+            } label: {
+                Image(systemName: mix.isPinned ? "pin.fill" : "pin")
+                    .font(.system(size: 16))
+                    .foregroundStyle(mix.isPinned ? Color.appTheme : .secondary)
+                    .padding(8)
+            }
+            .accessibilityLabel(mix.isPinned ? String(localized: "取消置顶") : String(localized: "置顶"))
 
             // 编辑按钮
             Button {
@@ -458,4 +473,5 @@ struct MixSelectionCard: View {
 
 #Preview {
     MixSoundView()
+        .environmentObject(MixSoundViewModel())
 }

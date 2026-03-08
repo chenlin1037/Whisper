@@ -20,6 +20,14 @@ final class AllSoundManger: ObservableObject {
 
     // MARK: - Public Methods
 
+    /// 切换单个声音的播放状态
+    func toggleSound(_ sound: Sound) {
+        objectWillChange.send()
+        sound.isPlaying.toggle()
+        AudioPlayerManager.shared.update(sound: sound)
+        syncPlayingSnapshot()
+    }
+
     /// 播放全部（恢复上一次播放状态）
     func playAll() {
         objectWillChange.send()

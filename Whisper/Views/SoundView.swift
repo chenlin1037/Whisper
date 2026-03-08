@@ -44,11 +44,14 @@ struct SoundView: View {
 
     // MARK: - Computed Properties
 
-    /// 获取所有分类（包括"全部"）
+    /// 获取所有分类（包括"收藏"和"全部"）
     private var categories: [String] {
         let cats = Set(soundVM.sounds.map { $0.category })
         var result = ["全部"]
         result.append(contentsOf: cats.sorted())
+        if !soundVM.favoriteSounds.isEmpty {
+            result.insert("收藏", at: 0)
+        }
         return result
     }
 
@@ -62,15 +65,18 @@ struct SoundView: View {
     private func soundsForCategory(at index: Int) -> [Sound] {
         guard index < categories.count else { return soundVM.sounds }
         let category = categories[index]
+        if category == "收藏" {
+            return soundVM.favoriteSounds
+        }
         if category == "全部" {
             return soundVM.sounds
         }
         return soundVM.sounds.filter { $0.category == category }
     }
 
-    /// 按分类分组的列表（不含「全部」），用于单列表分段展示
+    /// 按分类分组的列表（不含「收藏」和「全部」），用于单列表分段展示
     private var soundsGroupedByCategory: [(category: String, sounds: [Sound])] {
-        let cats = categories.filter { $0 != "全部" }
+        let cats = categories.filter { $0 != "全部" && $0 != "收藏" }
         return cats.map { cat in
             (category: cat, sounds: soundVM.sounds.filter { $0.category == cat })
         }
@@ -130,9 +136,12 @@ struct SoundView: View {
             }
         }
         .sheet(isPresented: $showSearch) {
-            SearchView(allSounds: soundVM.sounds) { sound in
-                soundVM.toggle(sound: sound)
-            }
+            SearchView(
+                allSounds: soundVM.sounds,
+                onSoundTap: { soundVM.toggle(sound: $0) },
+                onToggleFavorite: { soundVM.toggleFavorite($0) },
+                isFavorite: { soundVM.isFavorite($0) }
+            )
         }
     }
 
@@ -246,16 +255,23 @@ struct SoundView: View {
         ScrollViewReader { proxy in
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: 24) {
+                    // 收藏（有收藏时显示）
+                    if !soundVM.favoriteSounds.isEmpty {
+                        sectionHeader("收藏")
+                            .id("收藏")
+                        soundGrid(soundVM.favoriteSounds, showFavoriteButton: true)
+                    }
+
                     // 全部
                     sectionHeader("全部")
                         .id("全部")
-                    soundGrid(soundVM.sounds)
+                    soundGrid(soundVM.sounds, showFavoriteButton: true)
 
                     // 各分类
                     ForEach(soundsGroupedByCategory, id: \.category) { group in
                         sectionHeader(group.category)
                             .id(group.category)
-                        soundGrid(group.sounds)
+                        soundGrid(group.sounds, showFavoriteButton: true)
                     }
                 }
                 .padding(.horizontal, Layout.horizontalPadding)
@@ -264,7 +280,7 @@ struct SoundView: View {
             }
             .onChange(of: selectedCategoryIndex) { _, newIndex in
                 withAnimation(.easeInOut(duration: 0.3)) {
-                    let id = newIndex == 0 ? "全部" : categories[newIndex]
+                    let id = categories[newIndex]
                     proxy.scrollTo(id, anchor: .top)
                 }
             }
@@ -284,14 +300,16 @@ struct SoundView: View {
             .padding(.horizontal, 4)
     }
 
-    private func soundGrid(_ sounds: [Sound]) -> some View {
+    private func soundGrid(_ sounds: [Sound], showFavoriteButton: Bool = false) -> some View {
         LazyVGrid(columns: Layout.columns, spacing: Layout.gridSpacing) {
             ForEach(sounds) { sound in
-                SoundCard(
+                SoundCardView(
                     sound: sound,
                     size: Layout.cardSize,
                     iconSize: Layout.iconSize,
-                    onTap: { soundVM.toggle(sound: sound) }
+                    isFavorite: showFavoriteButton ? soundVM.isFavorite(sound) : false,
+                    onTap: { soundVM.toggle(sound: sound) },
+                    onToggleFavorite: showFavoriteButton ? { soundVM.toggleFavorite(sound) } : nil
                 )
             }
         }
@@ -342,81 +360,7 @@ struct DownsampledAssetImage: View {
 
 // MARK: - Sound Card Component
 
-struct SoundCard: View {
-    let sound: Sound
-    let size: CGFloat
-    let iconSize: CGFloat
-    let onTap: () -> Void
 
-    @Environment(\.colorScheme) private var colorScheme
-    @State private var isPressed = false
-    @State private var feedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
-
-    var body: some View {
-        VStack(spacing: 10) {
-            ZStack {
-                DownsampledAssetImage(
-                    assetName: sound.icon,
-                    pointSize: iconSize,
-                    isPlaying: sound.isPlaying,
-                    colorScheme: colorScheme
-                )
-            }
-            .frame(width: size, height: size)
-            .background(
-                RoundedRectangle(cornerRadius: 14)
-                    .fill(cardBackgroundColor)
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: 14)
-                    .stroke(cardBorderColor, lineWidth: colorScheme == .dark && !sound.isPlaying ? 0.5 : 0)
-            )
-            .scaleEffect(isPressed ? 0.95 : 1.0)
-
-            Text(sound.name)
-                .font(.system(size: 12, weight: .semibold))
-                .foregroundStyle(
-                    sound.isPlaying ? .primary : .secondary
-                )
-                .lineLimit(1)
-        }
-        .contentShape(Rectangle())
-        .onTapGesture {
-            handleTap()
-        }
-        .onAppear {
-            feedbackGenerator.prepare()
-        }
-        .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isPressed)
-        .animation(.spring(response: 0.3, dampingFraction: 0.7), value: sound.isPlaying)
-    }
-
-    private func handleTap() {
-        withAnimation(.easeInOut(duration: 0.1)) {
-            isPressed = true
-        }
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            withAnimation(.easeInOut(duration: 0.1)) {
-                isPressed = false
-            }
-        }
-
-        feedbackGenerator.impactOccurred()
-        onTap()
-    }
-
-    private var cardBackgroundColor: Color {
-        if sound.isPlaying {
-            return Color.appTheme
-        }
-        return Color.appTheme.opacity(0.6)
-    }
-
-    private var cardBorderColor: Color {
-        Color.primary.opacity(0.08)
-    }
-}
 
 // MARK: - Preview
 

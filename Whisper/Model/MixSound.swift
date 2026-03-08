@@ -24,19 +24,36 @@ struct MixSound: Identifiable, Codable {
     var items: [MixSoundItem]
     let createdAt: Date
     var updatedAt: Date
+    var isPinned: Bool
+
+    enum CodingKeys: String, CodingKey {
+        case id, name, items, createdAt, updatedAt, isPinned
+    }
 
     init(
         id: UUID = UUID(),
         name: String,
         items: [MixSoundItem],
         createdAt: Date = Date(),
-        updatedAt: Date = Date()
+        updatedAt: Date = Date(),
+        isPinned: Bool = false
     ) {
         self.id = id
         self.name = name
         self.items = items
         self.createdAt = createdAt
         self.updatedAt = updatedAt
+        self.isPinned = isPinned
+    }
+
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try c.decode(UUID.self, forKey: .id)
+        name = try c.decode(String.self, forKey: .name)
+        items = try c.decode([MixSoundItem].self, forKey: .items)
+        createdAt = try c.decode(Date.self, forKey: .createdAt)
+        updatedAt = try c.decode(Date.self, forKey: .updatedAt)
+        isPinned = try c.decodeIfPresent(Bool.self, forKey: .isPinned) ?? false
     }
 
     mutating func touch() {

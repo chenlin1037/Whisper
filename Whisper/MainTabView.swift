@@ -11,7 +11,7 @@ import StoreKit
 struct MainTabView: View {
     @State private var selectedTab = 0
     @StateObject private var mixSoundViewModel = MixSoundViewModel()
-    @Environment(\.requestReview) private var requestReview
+    // @Environment(\.requestReview) private var requestReview
 
     init() {
         configureTabBarAppearance()
@@ -39,9 +39,9 @@ struct MainTabView: View {
         .onChange(of: selectedTab) {
             UISelectionFeedbackGenerator().selectionChanged()
         }
-        .task {
-            AppLaunchHandler.handleLaunch(requestReview: { requestReview() })
-        }
+        // .task {
+        //     AppLaunchHandler.handleLaunch(requestReview: { requestReview() })
+        // }
     }
 
     private func configureTabBarAppearance() {

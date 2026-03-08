@@ -191,4 +191,5 @@ private struct SoundVolumeRow: View {
 
 #Preview {
     SoundSettingsView()
+        .environmentObject(MixSoundViewModel())
 }

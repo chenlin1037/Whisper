@@ -1,12 +1,18 @@
+//
+//  MixSoundViewModel.swift
+//  Whisper
+//
+//  仅负责编辑流 UI 状态与数据组织，业务逻辑下沉至 MixSoundService
+//
+
+import Combine
 import Foundation
 import SwiftUI
 
 @MainActor
 final class MixSoundViewModel: ObservableObject {
+    // MARK: - Published (UI 状态)
 
-    // MARK: - Published
-
-    @Published private(set) var mixes: [MixSound] = []
     @Published var editingMix: MixSound?
     @Published var isCreating = false
     @Published var isEditing = false
@@ -15,17 +21,15 @@ final class MixSoundViewModel: ObservableObject {
 
     // MARK: - Dependencies
 
+    private let mixService: MixSoundService
     private let soundManager = AllSoundManger.shared
-    private let store: MixSoundStore
+    private var cancellables = Set<AnyCancellable>()
 
-    // MARK: - Init
+    // MARK: - 暴露给 UI 的数据（来自 Service）
 
-    init(store: MixSoundStore = UserDefaultsMixSoundStore()) {
-        self.store = store
-        self.mixes = store.load()
+    var mixes: [MixSound] {
+        mixService.mixes
     }
-
-    // MARK: - Computed
 
     var allSounds: [Sound] {
         soundManager.sounds
@@ -35,25 +39,19 @@ final class MixSoundViewModel: ObservableObject {
         allSounds.filter { selectedSoundStableIDs.contains($0.stableID) }
     }
 
-    // MARK: - Create From Current State
+    // MARK: - Init
 
-    func createMixFromCurrentState(name: String) {
-        let playing = allSounds.filter { $0.isPlaying }
-        guard !playing.isEmpty else { return }
-
-        let items = playing.map {
-            MixSoundItem(
-                soundStableID: $0.stableID,
-                volume: $0.volume
-            )
-        }
-
-        let mix = MixSound(name: name, items: items)
-        mixes.append(mix)
-        persist()
+    /// 通过可选依赖注入，避免在默认参数中直接调用 MainActor 隔离的初始化器
+    init(mixService: MixSoundService? = nil) {
+        let service = mixService ?? MixSoundService()
+        self.mixService = service
+        service.objectWillChange
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in self?.objectWillChange.send() }
+            .store(in: &cancellables)
     }
 
-    // MARK: - Editing Flow
+    // MARK: - 编辑流（UI 状态）
 
     func startCreating() {
         isCreating = true
@@ -68,7 +66,7 @@ final class MixSoundViewModel: ObservableObject {
         isEditing = true
         isCreating = false
         newMixName = mix.name
-        selectedSoundStableIDs = Set(mix.items.map { $0.soundStableID })
+        selectedSoundStableIDs = Set(mix.items.map(\.soundStableID))
     }
 
     func cancelEditing() {
@@ -79,125 +77,56 @@ final class MixSoundViewModel: ObservableObject {
         editingMix = nil
     }
 
-    // MARK: - Save
+    // MARK: - 业务委托
+
+    func createMixFromCurrentState(name: String) {
+        mixService.createMixFromCurrentState(name: name)
+    }
 
     func saveMix() {
-        let name = newMixName.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !name.isEmpty, !selectedSoundStableIDs.isEmpty else { return }
-
-        let items = selectedSoundStableIDs.map { stableID in
-            let sound = allSounds.first { $0.stableID == stableID }
-            return MixSoundItem(
-                soundStableID: stableID,
-                volume: sound?.volume ?? 0.5
-            )
-        }
-
-        if isEditing, var mix = editingMix,
-           let index = mixes.firstIndex(where: { $0.id == mix.id }) {
-
-            mix.name = name
-            mix.items = items
-            mix.touch()
-            mixes[index] = mix
-
-        } else {
-            let mix = MixSound(name: name, items: items)
-            mixes.append(mix)
-        }
-
-        persist()
+        mixService.saveMix(
+            name: newMixName,
+            selectedSoundStableIDs: selectedSoundStableIDs,
+            editingMix: isEditing ? editingMix : nil
+        )
         cancelEditing()
+        objectWillChange.send()
     }
-
-    // MARK: - Delete
 
     func delete(_ mix: MixSound) {
-        mixes.removeAll { $0.id == mix.id }
-        persist()
+        mixService.deleteMix(mix)
+        objectWillChange.send()
     }
 
-    // MARK: - Play
+    func togglePin(_ mix: MixSound) {
+        mixService.togglePin(mix)
+        objectWillChange.send()
+    }
 
     func play(_ mix: MixSound) {
-        soundManager.pauseAll()
-
-        for item in mix.items {
-            guard let sound = allSounds.first(where: {
-                $0.stableID == item.soundStableID
-            }) else { continue }
-
-            sound.isPlaying = true
-            sound.volume = item.volume
-            AudioPlayerManager.shared.update(sound: sound)
-        }
-
-        soundManager.syncPlayingSnapshot()
+        mixService.playMix(mix)
     }
-    
-    // MARK: - Mix Detail Methods (添加到 ViewModel 中)
 
     func soundsForMix(_ mix: MixSound) -> [(Sound, Double)] {
-        mix.items.compactMap { item in
-            guard let sound = allSounds.first(where: { $0.stableID == item.soundStableID }) else {
-                return nil
-            }
-            return (sound, item.volume)
-        }
+        mixService.soundsForMix(mix)
     }
 
     func updateMixSoundVolume(mix: MixSound, stableID: String, volume: Double) {
-        guard let index = mixes.firstIndex(where: { $0.id == mix.id }) else { return }
-        var updatedMix = mixes[index]
-        
-        if let itemIndex = updatedMix.items.firstIndex(where: { $0.soundStableID == stableID }) {
-            updatedMix.items[itemIndex].volume = volume
-            updatedMix.touch()
-            mixes[index] = updatedMix
-            persist()
-        }
+        mixService.updateMixVolume(mix: mix, stableID: stableID, volume: volume)
+        objectWillChange.send()
     }
 
     func toggleMixSoundPlaying(mix: MixSound, stableID: String) {
-        guard let sound = allSounds.first(where: { $0.stableID == stableID }) else { return }
-        
-        sound.isPlaying.toggle()
-        
-        if sound.isPlaying {
-            // 从 mix 中获取保存的音量
-            if let item = mix.items.first(where: { $0.soundStableID == stableID }) {
-                sound.volume = item.volume
-            }
-        }
-        
-        AudioPlayerManager.shared.update(sound: sound)
-        soundManager.syncPlayingSnapshot()
+        mixService.toggleSoundInMix(mix: mix, stableID: stableID)
+        objectWillChange.send()
     }
 
     func removeSoundFromMix(mix: MixSound, stableID: String) {
-        guard let index = mixes.firstIndex(where: { $0.id == mix.id }) else { return }
-        var updatedMix = mixes[index]
-        
-        updatedMix.items.removeAll { $0.soundStableID == stableID }
-        updatedMix.touch()
-        
-        if updatedMix.items.isEmpty {
-            // 如果没有声音了，删除整个 mix
-            mixes.remove(at: index)
-        } else {
-            mixes[index] = updatedMix
-        }
-        
-        persist()
-        
-        // 停止播放该声音
-        if let sound = allSounds.first(where: { $0.stableID == stableID }) {
-            sound.isPlaying = false
-            AudioPlayerManager.shared.update(sound: sound)
-        }
+        mixService.removeSoundFromMix(mix: mix, stableID: stableID)
+        objectWillChange.send()
     }
 
-    // MARK: - Helpers
+    // MARK: - 选择状态（纯 UI）
 
     func isSelected(_ sound: Sound) -> Bool {
         selectedSoundStableIDs.contains(sound.stableID)
@@ -209,10 +138,5 @@ final class MixSoundViewModel: ObservableObject {
         } else {
             selectedSoundStableIDs.insert(sound.stableID)
         }
-    }
-
-    private func persist() {
-        mixes.sort { $0.updatedAt > $1.updatedAt }
-        store.save(mixes)
     }
 }

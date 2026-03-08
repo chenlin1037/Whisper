@@ -32,7 +32,10 @@ final class UserDefaultsMixSoundStore: MixSoundStore {
         else {
             return []
         }
-        return mixes.sorted { $0.updatedAt > $1.updatedAt }
+        return mixes.sorted { a, b in
+            if a.isPinned != b.isPinned { return a.isPinned }
+            return a.updatedAt > b.updatedAt
+        }
     }
 
     func save(_ mixes: [MixSound]) {

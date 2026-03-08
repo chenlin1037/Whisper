@@ -28,6 +28,12 @@ struct SearchView: View {
     /// 点击声音的回调
     let onSoundTap: (Sound) -> Void
 
+    /// 可选：切换收藏回调
+    var onToggleFavorite: ((Sound) -> Void)?
+
+    /// 可选：判断是否收藏
+    var isFavorite: ((Sound) -> Bool)?
+
     // MARK: - Constants
 
     private enum Layout {
@@ -41,9 +47,16 @@ struct SearchView: View {
 
     // MARK: - Initialization
 
-    init(allSounds: [Sound], onSoundTap: @escaping (Sound) -> Void) {
+    init(
+        allSounds: [Sound],
+        onSoundTap: @escaping (Sound) -> Void,
+        onToggleFavorite: ((Sound) -> Void)? = nil,
+        isFavorite: ((Sound) -> Bool)? = nil
+    ) {
         self.allSounds = allSounds
         self.onSoundTap = onSoundTap
+        self.onToggleFavorite = onToggleFavorite
+        self.isFavorite = isFavorite
     }
 
     // MARK: - Body
@@ -164,13 +177,17 @@ struct SearchView: View {
 
                         LazyVGrid(columns: Layout.columns, spacing: 12) {
                             ForEach(viewModel.searchResults) { sound in
-                                SoundCard(
+                                SoundCardView(
                                     sound: sound,
                                     size: Layout.cardSize,
                                     iconSize: Layout.iconSize,
+                                    isFavorite: isFavorite?(sound) ?? false,
                                     onTap: {
                                         onSoundTap(sound)
                                         dismiss()
+                                    },
+                                    onToggleFavorite: onToggleFavorite.map { callback in
+                                        { callback(sound) }
                                     }
                                 )
                             }

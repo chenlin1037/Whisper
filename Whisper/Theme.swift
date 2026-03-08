@@ -10,7 +10,7 @@ import SwiftUI
 
 extension Color {
     /// App global theme color: #8872d9ff
-    static let appTheme = Color(red: 136 / 255, green: 114 / 255, blue: 217 / 255)
+    static let appTheme = Color(red: 53 / 255, green: 94 / 255, blue: 202 / 255)
 }
 
 extension UIColor {
