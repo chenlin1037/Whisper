@@ -5,11 +5,11 @@
 //  Created by luckly on 2026/1/19.
 //
 
-
 import SwiftUI
 
 struct LanguageManagerView: View {
-    @Environment(\.languageManager) private var languageManager
+    @EnvironmentObject var languageManager: LanguageManager
+
     @Environment(\.dismiss) private var dismiss
     @State private var showAlert = false
 

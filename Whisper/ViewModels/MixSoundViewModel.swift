@@ -2,8 +2,6 @@
 //  MixSoundViewModel.swift
 //  Whisper
 //
-//  仅负责编辑流 UI 状态与数据组织，业务逻辑下沉至 MixSoundService
-//
 
 import Combine
 import Foundation
@@ -11,6 +9,7 @@ import SwiftUI
 
 @MainActor
 final class MixSoundViewModel: ObservableObject {
+
     // MARK: - Published (UI 状态)
 
     @Published var editingMix: MixSound?
@@ -22,10 +21,10 @@ final class MixSoundViewModel: ObservableObject {
     // MARK: - Dependencies
 
     private let mixService: MixSoundService
-    private let soundManager = AllSoundManger.shared
+    private let soundManager: AllSoundManger
     private var cancellables = Set<AnyCancellable>()
 
-    // MARK: - 暴露给 UI 的数据（来自 Service）
+    // MARK: - 暴露给 UI 的数据
 
     var mixes: [MixSound] {
         mixService.mixes
@@ -39,19 +38,24 @@ final class MixSoundViewModel: ObservableObject {
         allSounds.filter { selectedSoundStableIDs.contains($0.stableID) }
     }
 
-    // MARK: - Init
+    // MARK: - Init（✅彻底解决 Swift 6 问题）
 
-    /// 通过可选依赖注入，避免在默认参数中直接调用 MainActor 隔离的初始化器
-    init(mixService: MixSoundService? = nil) {
-        let service = mixService ?? MixSoundService()
-        self.mixService = service
-        service.objectWillChange
+    init(
+        mixService: MixSoundService,
+        soundManager: AllSoundManger
+    ) {
+        self.mixService = mixService
+        self.soundManager = soundManager
+
+        mixService.objectWillChange
             .receive(on: RunLoop.main)
-            .sink { [weak self] _ in self?.objectWillChange.send() }
+            .sink { [weak self] _ in
+                self?.objectWillChange.send()
+            }
             .store(in: &cancellables)
     }
 
-    // MARK: - 编辑流（UI 状态）
+    // MARK: - 编辑流
 
     func startCreating() {
         isCreating = true
@@ -90,17 +94,14 @@ final class MixSoundViewModel: ObservableObject {
             editingMix: isEditing ? editingMix : nil
         )
         cancelEditing()
-        objectWillChange.send()
     }
 
     func delete(_ mix: MixSound) {
         mixService.deleteMix(mix)
-        objectWillChange.send()
     }
 
     func togglePin(_ mix: MixSound) {
         mixService.togglePin(mix)
-        objectWillChange.send()
     }
 
     func play(_ mix: MixSound) {
@@ -113,20 +114,17 @@ final class MixSoundViewModel: ObservableObject {
 
     func updateMixSoundVolume(mix: MixSound, stableID: String, volume: Double) {
         mixService.updateMixVolume(mix: mix, stableID: stableID, volume: volume)
-        objectWillChange.send()
     }
 
     func toggleMixSoundPlaying(mix: MixSound, stableID: String) {
         mixService.toggleSoundInMix(mix: mix, stableID: stableID)
-        objectWillChange.send()
     }
 
     func removeSoundFromMix(mix: MixSound, stableID: String) {
         mixService.removeSoundFromMix(mix: mix, stableID: stableID)
-        objectWillChange.send()
     }
 
-    // MARK: - 选择状态（纯 UI）
+    // MARK: - 选择状态
 
     func isSelected(_ sound: Sound) -> Bool {
         selectedSoundStableIDs.contains(sound.stableID)

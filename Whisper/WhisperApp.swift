@@ -14,7 +14,6 @@ struct WhisperApp: App {
             MainTabView()
                 .tint(Color.appTheme)
                 .applyTheme()
-                .environment(\.themeManager, ThemeManager.shared)
                 .applyLanguage()
         }
     }

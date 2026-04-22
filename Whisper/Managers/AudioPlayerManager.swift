@@ -1,6 +1,17 @@
+//
+//  AudioPlayerManager.swift
+//  GoodSleep
+//
+//  修复版本：
+//  1. 用 AVPlayerLooper 替代 NotificationCenter 手动循环，消除循环引用
+//  2. stopAll() 内前置 cancelFadeOut()，确保 Timer 被可靠 invalidate
+//  3. 添加 @MainActor，消除数据竞争
+//
+
 import AVFoundation
 import Foundation
 
+@MainActor  // ✅ 修复3：添加 @MainActor，确保所有属性访问都在主线程，消除数据竞争
 final class AudioPlayerManager: ObservableObject {
     static let shared = AudioPlayerManager()
 
@@ -14,9 +25,9 @@ final class AudioPlayerManager: ObservableObject {
     }
 
     private var audioSessionConfigured = false
-    private var players: [UUID: AVPlayer] = [:]
+    private var players: [UUID: AVQueuePlayer] = [:]       // ✅ 修复1：改用 AVQueuePlayer 配合 AVPlayerLooper
+    private var loopers: [UUID: AVPlayerLooper] = [:]      // ✅ 修复1：持有 looper，自动管理循环，无需 NotificationCenter
     private var baseVolumes: [UUID: Double] = [:]
-    private var loopObservers: [UUID: NSObjectProtocol] = [:]
 
     private var fadeTimer: Timer?
     private var fadeStartDate: Date?
@@ -26,15 +37,12 @@ final class AudioPlayerManager: ObservableObject {
 
     private enum Constants {
         static let fadeTickInterval: TimeInterval = 0.1
-        static let minimumVolume: Float = 0.0
-        static let maximumVolume: Float = 1.0
-        static let seekTolerance: CMTime = .zero
     }
 
     private init() {}
 
     deinit {
-        cleanup()
+        fadeTimer?.invalidate()
     }
 
     // MARK: - Public Methods
@@ -55,25 +63,19 @@ final class AudioPlayerManager: ObservableObject {
         player.volume = calculateVolume(baseVolume: sound.volume)
     }
 
-    /// 刷新所有播放器的音量（总音量或淡出变化时调用）
-    private func refreshAllVolumes() {
-        for (id, player) in players {
-            let base = baseVolumes[id] ?? 1.0
-            player.volume = calculateVolume(baseVolume: base)
-        }
-    }
-
     /// 停止所有播放
     func stopAll() {
-        for (_, player) in players { //id
+        cancelFadeOut()  // ✅ 修复2：前置 cancelFadeOut()，确保 Timer 在清理 players 前被 invalidate
+
+        for player in players.values {
             player.pause()
-            player.replaceCurrentItem(with: nil)
+            player.removeAllItems()
         }
 
-        removeAllObservers()
+        // ✅ 修复1：释放所有 looper，自动停止循环，无需手动 removeObserver
+        loopers.removeAll()
         players.removeAll()
         baseVolumes.removeAll()
-        cancelFadeOut()
     }
 
     /// 开始淡出效果
@@ -96,7 +98,9 @@ final class AudioPlayerManager: ObservableObject {
             withTimeInterval: Constants.fadeTickInterval,
             repeats: true
         ) { [weak self] _ in
-            self?.updateFadeProgress()
+            Task { @MainActor in
+                self?.updateFadeProgress()
+            }
         }
     }
 
@@ -112,8 +116,7 @@ final class AudioPlayerManager: ObservableObject {
     // MARK: - Private Methods
 
     private func startPlaying(_ sound: Sound) {
-        // 防止重复创建
-        guard players[sound.id] == nil else { return }
+        guard players[sound.id] == nil else { return }  // 防止重复创建
 
         configureAudioSessionIfNeeded()
 
@@ -122,11 +125,18 @@ final class AudioPlayerManager: ObservableObject {
             return
         }
 
-        let player = createPlayer(with: url, volume: sound.volume)
-        setupLoopObserver(for: sound.id, player: player)
+        // ✅ 修复1：用 AVPlayerLooper 实现循环播放
+        // AVPlayerLooper 内部自动管理 AVPlayerItem 的复用与循环，
+        // 不依赖 NotificationCenter，彻底消除 object 参数导致的循环引用
+        let item = AVPlayerItem(url: url)
+        let player = AVQueuePlayer()
+        let looper = AVPlayerLooper(player: player, templateItem: item)
 
+        player.volume = calculateVolume(baseVolume: sound.volume)
         player.play()
+
         players[sound.id] = player
+        loopers[sound.id] = looper  // 必须持有 looper，否则 ARC 会立即释放导致循环停止
         baseVolumes[sound.id] = sound.volume
     }
 
@@ -134,47 +144,20 @@ final class AudioPlayerManager: ObservableObject {
         guard let player = players[sound.id] else { return }
 
         player.pause()
-        player.replaceCurrentItem(with: nil)
+        player.removeAllItems()
+
+        // ✅ 修复1：移除 looper 即停止循环，无需手动操作 NotificationCenter
+        loopers.removeValue(forKey: sound.id)
         players.removeValue(forKey: sound.id)
         baseVolumes.removeValue(forKey: sound.id)
-
-        removeObserver(for: sound.id)
     }
 
-    private func createPlayer(with url: URL, volume: Double) -> AVPlayer {
-        let player = AVPlayer(url: url)
-        player.actionAtItemEnd = .none
-        player.volume = calculateVolume(baseVolume: volume)
-        return player
-    }
-
-    private func setupLoopObserver(for id: UUID, player: AVPlayer) {
-        guard let item = player.currentItem else { return }
-
-        let observer = NotificationCenter.default.addObserver(
-            forName: .AVPlayerItemDidPlayToEndTime,
-            object: item,
-            queue: .main
-        ) { [weak player] _ in
-            player?.seek(to: .zero, toleranceBefore: .zero, toleranceAfter: .zero)
-            player?.play()
+    /// 刷新所有播放器的音量（总音量或淡出变化时调用）
+    private func refreshAllVolumes() {
+        for (id, player) in players {
+            let base = baseVolumes[id] ?? 1.0
+            player.volume = calculateVolume(baseVolume: base)
         }
-
-        loopObservers[id] = observer
-    }
-
-    private func removeObserver(for id: UUID) {
-        if let observer = loopObservers[id] {
-            NotificationCenter.default.removeObserver(observer)
-            loopObservers.removeValue(forKey: id)
-        }
-    }
-
-    private func removeAllObservers() {
-        for observer in loopObservers.values {
-            NotificationCenter.default.removeObserver(observer)
-        }
-        loopObservers.removeAll()
     }
 
     private func validateAndGetURL(from urlString: String) -> URL? {
@@ -213,21 +196,17 @@ final class AudioPlayerManager: ObservableObject {
 
         let now = Date()
 
-        // 淡出结束
         if now >= end {
             applyFadeMultiplier(0.0)
             stopAll()
-            cancelFadeOut()
-            return
+            return  // stopAll() 内已调用 cancelFadeOut()，无需重复调用
         }
 
-        // 淡出未开始
         guard now > start else {
             applyFadeMultiplier(1.0)
             return
         }
 
-        // 计算淡出进度
         let totalDuration = end.timeIntervalSince(start)
         let elapsed = now.timeIntervalSince(start)
         let progress = elapsed / totalDuration

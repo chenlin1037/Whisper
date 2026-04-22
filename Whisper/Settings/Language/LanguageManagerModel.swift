@@ -5,11 +5,7 @@
 //  Created by luckly on 2026/1/19.
 //
 
-//
-//  LanguageSettings.swift
-//  MinCalendar
-//
-//  Created by luckly on 2025/8/20.
+
 //
 // 这部分的逻辑是语言国际化
 // 1 检测系统的语言
@@ -36,7 +32,7 @@ enum Language: String, CaseIterable {
     }
 }
 
-class LanguageManager: ObservableObject {
+final class LanguageManager: ObservableObject {
     static let shared = LanguageManager()
     @Published var currentLanguage: Language = .en
     private var currentBundle: Bundle = .main
@@ -115,17 +111,6 @@ class LanguageManager: ObservableObject {
             return "\(currentLanguage.displayName) (\(systemLanguage.displayName))"
         }
         return currentLanguage.displayName
-    }
-}
-
-struct LanguageMangerKey: EnvironmentKey {
-    static let defaultValue: LanguageManager = .shared
-}
-
-extension EnvironmentValues {
-    var languageManager: LanguageManager {
-        get { self[LanguageMangerKey.self] }
-        set { self[LanguageMangerKey.self] = newValue }
     }
 }
 

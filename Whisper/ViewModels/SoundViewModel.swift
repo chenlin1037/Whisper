@@ -39,14 +39,15 @@ final class SoundViewModel: ObservableObject {
         isLoading = true
         errorMessage = nil
 
-        Task {
+        Task { [weak self] in
+            guard let self else { return }
             do {
                 let sounds = try await SoundLoader.loadFromBundle()
-                soundManager.sounds = sounds
-                isLoading = false
+                self.soundManager.sounds = sounds
+                self.isLoading = false
             } catch {
-                errorMessage = "加载声音失败: \(error.localizedDescription)"
-                isLoading = false
+                self.errorMessage = "加载声音失败: \(error.localizedDescription)"
+                self.isLoading = false
             }
         }
     }
@@ -59,7 +60,6 @@ final class SoundViewModel: ObservableObject {
 
     func toggleFavorite(_ sound: Sound) {
         favoriteManager.toggleFavorite(sound)
-        objectWillChange.send()
     }
 
     // MARK: - Play (委托 AllSoundManager)

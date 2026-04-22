@@ -8,17 +8,18 @@
 import SwiftUI
 
 struct ThemeMangerView: View {
-    @Environment(\.themeManager) private var themeManager
+    @EnvironmentObject var themeManager: ThemeManager
+
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         List {
-            ForEach(themeManager.getAllThemes(), id: \.self) { theme in
+            ForEach(AppTheme.allCases, id: \.self) { theme in
                 ThemeOptionRow(
                     theme: theme,
                     isSelected: themeManager.currentTheme == theme
                 ) {
-                    themeManager.setTheme(theme)
+                    themeManager.currentTheme = theme
                     dismiss()
                 }
             }
@@ -42,7 +43,7 @@ struct ThemeOptionRow: View {
                         .font(.system(size: 17))
                         .foregroundColor(.primary)
 
-                    Text(themeDescription(for: theme))
+                    Text(theme.themeDescription)
                         .font(.system(size: 13))
                         .foregroundColor(.secondary)
                 }
@@ -61,16 +62,7 @@ struct ThemeOptionRow: View {
         .buttonStyle(PlainButtonStyle())
     }
 
-    private func themeDescription(for theme: AppTheme) -> String {
-        switch theme {
-        case .system:
-            return String(localized: "theme_system_description")
-        case .light:
-            return String(localized: "theme_light_description")
-        case .dark:
-            return String(localized: "theme_dark_description")
-        }
-    }
+    
 }
 
 #Preview {

@@ -471,7 +471,4 @@ struct MixSelectionCard: View {
     }
 }
 
-#Preview {
-    MixSoundView()
-        .environmentObject(MixSoundViewModel())
-}
+

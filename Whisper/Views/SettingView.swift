@@ -23,7 +23,7 @@ struct SettingView: View {
             List {
                 Section {
                     NavigationLink(value: SettingsRoute.theme) {
-                        SettingsRow(icon: "paintbrush.fill", title: "主题颜色", detail: ThemeManager.shared.getThemeDisplayName())
+                        SettingsRow(icon: "paintbrush.fill", title: "主题颜色", detail: ThemeManager.shared.currentTheme.displayName)
                     }
 
                     NavigationLink(value: SettingsRoute.language) {

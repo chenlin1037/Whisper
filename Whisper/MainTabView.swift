@@ -2,18 +2,32 @@
 //  MainTabView.swift
 //  Whisper
 //
-//  Created by luckly on 2026/1/24.
-//
 
 import SwiftUI
 import StoreKit
 
 struct MainTabView: View {
     @State private var selectedTab = 0
-    @StateObject private var mixSoundViewModel = MixSoundViewModel()
-    // @Environment(\.requestReview) private var requestReview
+
+    // ✅ 使用自定义 init 初始化 StateObject（关键）
+    @StateObject private var mixSoundViewModel: MixSoundViewModel
+
+    // MARK: - Init
 
     init() {
+        
+
+        // ✅ 所有 @MainActor 单例在这里创建（安全）
+        let soundManager = AllSoundManger.shared
+        let mixService = MixSoundService(soundManager: soundManager)
+
+        _mixSoundViewModel = StateObject(
+            wrappedValue: MixSoundViewModel(
+                mixService: mixService,
+                soundManager: soundManager
+            )
+        )
+        
         configureTabBarAppearance()
     }
 
@@ -39,17 +53,15 @@ struct MainTabView: View {
         .onChange(of: selectedTab) {
             UISelectionFeedbackGenerator().selectionChanged()
         }
-        // .task {
-        //     AppLaunchHandler.handleLaunch(requestReview: { requestReview() })
-        // }
     }
+
+    // MARK: - UI
 
     private func configureTabBarAppearance() {
         let appearance = UITabBarAppearance()
         appearance.configureWithTransparentBackground()
         appearance.backgroundColor = UIColor.systemBackground.withAlphaComponent(0.95)
 
-        // 集中设置样式
         let itemAppearance = appearance.stackedLayoutAppearance
         itemAppearance.selected.iconColor = UIColor.appTheme
         itemAppearance.selected.titleTextAttributes = [.foregroundColor: UIColor.appTheme]
