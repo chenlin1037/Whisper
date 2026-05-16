@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>logFormatVersion</key>
+	<integer>11</integer>
+	<key>logs</key>
+	<dict>
+		<key>753504E0-DE1D-46E2-8701-EF9B556F7C54</key>
+		<dict>
+			<key>className</key>
+			<string>IDECommandLineBuildLog</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>753504E0-DE1D-46E2-8701-EF9B556F7C54.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>E</string>
+				<key>totalNumberOfAnalyzerIssues</key>
+				<integer>0</integer>
+				<key>totalNumberOfErrors</key>
+				<integer>1</integer>
+				<key>totalNumberOfTestFailures</key>
+				<integer>0</integer>
+				<key>totalNumberOfWarnings</key>
+				<integer>0</integer>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>WhiteNoisePlayer project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>WhiteNoisePlayer</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>1</integer>
+			<key>signature</key>
+			<string>Building project WhiteNoisePlayer with scheme WhiteNoisePlayer</string>
+			<key>timeStartedRecording</key>
+			<real>799573481.62163198</real>
+			<key>timeStoppedRecording</key>
+			<real>799573491.86199999</real>
+			<key>title</key>
+			<string>Building project WhiteNoisePlayer with scheme WhiteNoisePlayer</string>
+			<key>uniqueIdentifier</key>
+			<string>753504E0-DE1D-46E2-8701-EF9B556F7C54</string>
+		</dict>
+		<key>F721DA51-E12D-4280-90F0-C451B5216C26</key>
+		<dict>
+			<key>className</key>
+			<string>IDECommandLineBuildLog</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>F721DA51-E12D-4280-90F0-C451B5216C26.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>S</string>
+				<key>totalNumberOfAnalyzerIssues</key>
+				<integer>0</integer>
+				<key>totalNumberOfErrors</key>
+				<integer>0</integer>
+				<key>totalNumberOfTestFailures</key>
+				<integer>0</integer>
+				<key>totalNumberOfWarnings</key>
+				<integer>0</integer>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>WhiteNoisePlayer project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>WhiteNoisePlayer</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>1</integer>
+			<key>signature</key>
+			<string>Building project WhiteNoisePlayer with scheme WhiteNoisePlayer and configuration Debug</string>
+			<key>timeStartedRecording</key>
+			<real>800119079.68394399</real>
+			<key>timeStoppedRecording</key>
+			<real>800119104.09348595</real>
+			<key>title</key>
+			<string>Building project WhiteNoisePlayer with scheme WhiteNoisePlayer and configuration Debug</string>
+			<key>uniqueIdentifier</key>
+			<string>F721DA51-E12D-4280-90F0-C451B5216C26</string>
+		</dict>
+	</dict>
+</dict>
+</plist>

@@ -1,0 +1,520 @@
+[
+  {
+    "id": "river",
+    "name": "River",
+    "symbol": "river",
+    "category": "Nature",
+    "url": "https://cdn.rainsound.online/sounds/nature/river.mp3"
+  },
+  {
+    "id": "waves",
+    "name": "Waves",
+    "symbol": "waves",
+    "category": "Nature",
+    "url": "https://cdn.rainsound.online/sounds/nature/waves.mp3"
+  },
+  {
+    "id": "campfire",
+    "name": "Campfire",
+    "symbol": "campfire",
+    "category": "Nature",
+    "url": "https://cdn.rainsound.online/sounds/nature/campfire.mp3"
+  },
+  {
+    "id": "wind",
+    "name": "Wind",
+    "symbol": "wind",
+    "category": "Nature",
+    "url": "https://cdn.rainsound.online/sounds/nature/wind.mp3"
+  },
+  {
+    "id": "howling-wind",
+    "name": "Howling Wind",
+    "symbol": "howling-wind",
+    "category": "Nature",
+    "url": "https://cdn.rainsound.online/sounds/nature/howling-wind.mp3"
+  },
+  {
+    "id": "droplets",
+    "name": "Droplets",
+    "symbol": "droplets",
+    "category": "Nature",
+    "url": "https://cdn.rainsound.online/sounds/nature/droplets.mp3"
+  },
+  {
+    "id": "jungle",
+    "name": "Jungle",
+    "symbol": "jungle",
+    "category": "Nature",
+    "url": "https://cdn.rainsound.online/sounds/nature/jungle.mp3"
+  },
+  {
+    "id": "walk-in-snow",
+    "name": "Walk in Snow",
+    "symbol": "walk-in-snow",
+    "category": "Nature",
+    "url": "https://cdn.rainsound.online/sounds/nature/walk-in-snow.mp3"
+  },
+  {
+    "id": "walk-on-gravel",
+    "name": "Walk on Gravel",
+    "symbol": "walk-on-gravel",
+    "category": "Nature",
+    "url": "https://cdn.rainsound.online/sounds/nature/walk-on-gravel.mp3"
+  },
+  {
+    "id": "walk-on-leaves",
+    "name": "Walk on Leaves",
+    "symbol": "walk-on-leaves",
+    "category": "Nature",
+    "url": "https://cdn.rainsound.online/sounds/nature/walk-on-leaves.mp3"
+  },
+  {
+    "id": "waterfall",
+    "name": "Waterfall",
+    "symbol": "waterfall",
+    "category": "Nature",
+    "url": "https://cdn.rainsound.online/sounds/nature/waterfall.mp3"
+  },
+  {
+    "id": "birds",
+    "name": "Birds",
+    "symbol": "birds",
+    "category": "Animals",
+    "url": "https://cdn.rainsound.online/sounds/animals/birds.mp3"
+  },
+  {
+    "id": "highway",
+    "name": "Highway",
+    "symbol": "highway",
+    "category": "Urban",
+    "url": "https://cdn.rainsound.online/sounds/urban/highway.mp3"
+  },
+  {
+    "id": "rain-on-car-roof",
+    "name": "Rain on Car Roof",
+    "symbol": "rain-on-car-roof",
+    "category": "Rain",
+    "url": "https://cdn.rainsound.online/sounds/rain/rain-on-car-roof.mp3"
+  },
+  {
+    "id": "rain-on-umbrella",
+    "name": "Rain on Umbrella",
+    "symbol": "rain-on-umbrella",
+    "category": "Rain",
+    "url": "https://cdn.rainsound.online/sounds/rain/rain-on-umbrella.mp3"
+  },
+  {
+    "id": "rain-on-window",
+    "name": "Rain on Window",
+    "symbol": "rain-on-window",
+    "category": "Rain",
+    "url": "https://cdn.rainsound.online/sounds/rain/rain-on-window.mp3"
+  },
+  {
+    "id": "thunder",
+    "name": "Thunder",
+    "symbol": "thunder",
+    "category": "Rain",
+    "url": "https://cdn.rainsound.online/sounds/rain/thunder.mp3"
+  },
+  {
+    "id": "light-rain",
+    "name": "Light Rain",
+    "symbol": "light-rain",
+    "category": "Rain",
+    "url": "https://cdn.rainsound.online/sounds/rain/light-rain.mp3"
+  },
+  {
+    "id": "rain-on-tent",
+    "name": "Rain on Tent",
+    "symbol": "rain-on-tent",
+    "category": "Rain",
+    "url": "https://cdn.rainsound.online/sounds/rain/rain-on-tent.mp3"
+  },
+  {
+    "id": "rain-on-leaves",
+    "name": "Rain on Leaves",
+    "symbol": "rain-on-leaves",
+    "category": "Rain",
+    "url": "https://cdn.rainsound.online/sounds/rain/rain-on-leaves.mp3"
+  },
+  {
+    "id": "beehive",
+    "name": "Beehive",
+    "symbol": "beehive",
+    "category": "Animals",
+    "url": "https://cdn.rainsound.online/sounds/animals/beehive.mp3"
+  },
+  {
+    "id": "cat-purring",
+    "name": "Cat Purring",
+    "symbol": "cat-purring",
+    "category": "Animals",
+    "url": "https://cdn.rainsound.online/sounds/animals/cat-purring.mp3"
+  },
+  {
+    "id": "chickens",
+    "name": "Chickens",
+    "symbol": "chickens",
+    "category": "Animals",
+    "url": "https://cdn.rainsound.online/sounds/animals/chickens.mp3"
+  },
+  {
+    "id": "cows",
+    "name": "Cows",
+    "symbol": "cows",
+    "category": "Animals",
+    "url": "https://cdn.rainsound.online/sounds/animals/cows.mp3"
+  },
+  {
+    "id": "crickets",
+    "name": "Crickets",
+    "symbol": "crickets",
+    "category": "Animals",
+    "url": "https://cdn.rainsound.online/sounds/animals/crickets.mp3"
+  },
+  {
+    "id": "crows",
+    "name": "Crows",
+    "symbol": "crows",
+    "category": "Animals",
+    "url": "https://cdn.rainsound.online/sounds/animals/crows.mp3"
+  },
+  {
+    "id": "dog-barking",
+    "name": "Dog Barking",
+    "symbol": "dog-barking",
+    "category": "Animals",
+    "url": "https://cdn.rainsound.online/sounds/animals/dog-barking.mp3"
+  },
+  {
+    "id": "frog",
+    "name": "Frog",
+    "symbol": "frog",
+    "category": "Animals",
+    "url": "https://cdn.rainsound.online/sounds/animals/frog.mp3"
+  },
+  {
+    "id": "horse-galopp",
+    "name": "Horse Gallop",
+    "symbol": "horse-galopp",
+    "category": "Animals",
+    "url": "https://cdn.rainsound.online/sounds/animals/horse-galopp.mp3"
+  },
+  {
+    "id": "owl",
+    "name": "Owl",
+    "symbol": "owl",
+    "category": "Animals",
+    "url": "https://cdn.rainsound.online/sounds/animals/owl.mp3"
+  },
+  {
+    "id": "seagulls",
+    "name": "Seagulls",
+    "symbol": "seagulls",
+    "category": "Animals",
+    "url": "https://cdn.rainsound.online/sounds/animals/seagulls.mp3"
+  },
+  {
+    "id": "sheep",
+    "name": "Sheep",
+    "symbol": "sheep",
+    "category": "Animals",
+    "url": "https://cdn.rainsound.online/sounds/animals/sheep.mp3"
+  },
+  {
+    "id": "whale",
+    "name": "Whale",
+    "symbol": "whale",
+    "category": "Animals",
+    "url": "https://cdn.rainsound.online/sounds/animals/whale.mp3"
+  },
+  {
+    "id": "wolf",
+    "name": "Wolf Howl",
+    "symbol": "wolf",
+    "category": "Animals",
+    "url": "https://cdn.rainsound.online/sounds/animals/wolf.mp3"
+  },
+  {
+    "id": "woodpecker",
+    "name": "Woodpecker",
+    "symbol": "woodpecker",
+    "category": "Animals",
+    "url": "https://cdn.rainsound.online/sounds/animals/woodpecker.mp3"
+  },
+  {
+    "id": "road",
+    "name": "Street",
+    "symbol": "road",
+    "category": "Urban",
+    "url": "https://cdn.rainsound.online/sounds/urban/road.mp3"
+  },
+  {
+    "id": "ambulance-siren",
+    "name": "Ambulance Siren",
+    "symbol": "ambulance-siren",
+    "category": "Urban",
+    "url": "https://cdn.rainsound.online/sounds/urban/ambulance-siren.mp3"
+  },
+  {
+    "id": "busy-street",
+    "name": "Busy Street",
+    "symbol": "busy-street",
+    "category": "Urban",
+    "url": "https://cdn.rainsound.online/sounds/urban/busy-street.mp3"
+  },
+  {
+    "id": "crowd",
+    "name": "Crowd",
+    "symbol": "crowd",
+    "category": "Urban",
+    "url": "https://cdn.rainsound.online/sounds/urban/crowd.mp3"
+  },
+  {
+    "id": "fireworks",
+    "name": "Fireworks",
+    "symbol": "fireworks",
+    "category": "Urban",
+    "url": "https://cdn.rainsound.online/sounds/urban/fireworks.mp3"
+  },
+  {
+    "id": "traffic",
+    "name": "Traffic",
+    "symbol": "traffic",
+    "category": "Urban",
+    "url": "https://cdn.rainsound.online/sounds/urban/traffic.mp3"
+  },
+  {
+    "id": "airport",
+    "name": "Airport",
+    "symbol": "airport",
+    "category": "Places",
+    "url": "https://cdn.rainsound.online/sounds/places/airport.mp3"
+  },
+  {
+    "id": "aundry-room",
+    "name": "Laundry Room",
+    "symbol": "aundry-room",
+    "category": "Places",
+    "url": "https://cdn.rainsound.online/sounds/places/aundry-room.mp3"
+  },
+  {
+    "id": "cafe",
+    "name": "Cafe",
+    "symbol": "cafe",
+    "category": "Places",
+    "url": "https://cdn.rainsound.online/sounds/places/cafe.mp3"
+  },
+  {
+    "id": "carousel",
+    "name": "Carousel",
+    "symbol": "carousel",
+    "category": "Places",
+    "url": "https://cdn.rainsound.online/sounds/places/carousel.mp3"
+  },
+  {
+    "id": "church",
+    "name": "Church",
+    "symbol": "church",
+    "category": "Places",
+    "url": "https://cdn.rainsound.online/sounds/places/church.mp3"
+  },
+  {
+    "id": "crowded-bar",
+    "name": "Crowded Bar",
+    "symbol": "crowded-bar",
+    "category": "Places",
+    "url": "https://cdn.rainsound.online/sounds/places/crowded-bar.mp3"
+  },
+  {
+    "id": "laboratory",
+    "name": "Laboratory",
+    "symbol": "laboratory",
+    "category": "Places",
+    "url": "https://cdn.rainsound.online/sounds/places/laboratory.mp3"
+  },
+  {
+    "id": "library",
+    "name": "Library",
+    "symbol": "library",
+    "category": "Places",
+    "url": "https://cdn.rainsound.online/sounds/places/library.mp3"
+  },
+  {
+    "id": "night-village",
+    "name": "Night Village",
+    "symbol": "night-village",
+    "category": "Places",
+    "url": "https://cdn.rainsound.online/sounds/places/night-village.mp3"
+  },
+  {
+    "id": "office",
+    "name": "Office",
+    "symbol": "office",
+    "category": "Places",
+    "url": "https://cdn.rainsound.online/sounds/places/office.mp3"
+  },
+  {
+    "id": "restaurant",
+    "name": "Restaurant",
+    "symbol": "restaurant",
+    "category": "Places",
+    "url": "https://cdn.rainsound.online/sounds/places/restaurant.mp3"
+  },
+  {
+    "id": "subway-station",
+    "name": "Subway Station",
+    "symbol": "subway-station",
+    "category": "Places",
+    "url": "https://cdn.rainsound.online/sounds/places/subway-station.mp3"
+  },
+  {
+    "id": "supermarket",
+    "name": "Supermarket",
+    "symbol": "supermarket",
+    "category": "Places",
+    "url": "https://cdn.rainsound.online/sounds/places/supermarket.mp3"
+  },
+  {
+    "id": "underwater",
+    "name": "Underwater",
+    "symbol": "underwater",
+    "category": "Places",
+    "url": "https://cdn.rainsound.online/sounds/places/underwater.mp3"
+  },
+  {
+    "id": "inside-a-train",
+    "name": "Inside a Train",
+    "symbol": "inside-a-train",
+    "category": "Transport",
+    "url": "https://cdn.rainsound.online/sounds/transport/inside-a-train.mp3"
+  },
+  {
+    "id": "airplane",
+    "name": "Airplane",
+    "symbol": "airplane",
+    "category": "Transport",
+    "url": "https://cdn.rainsound.online/sounds/transport/airplane.mp3"
+  },
+  {
+    "id": "submarine",
+    "name": "Submarine",
+    "symbol": "submarine",
+    "category": "Transport",
+    "url": "https://cdn.rainsound.online/sounds/transport/submarine.mp3"
+  },
+  {
+    "id": "sailboat",
+    "name": "Sailboat",
+    "symbol": "sailboat",
+    "category": "Transport",
+    "url": "https://cdn.rainsound.online/sounds/transport/sailboat.mp3"
+  },
+  {
+    "id": "rowing-boat",
+    "name": "Rowing Boat",
+    "symbol": "rowing-boat",
+    "category": "Transport",
+    "url": "https://cdn.rainsound.online/sounds/transport/rowing-boat.mp3"
+  },
+  {
+    "id": "keyboard",
+    "name": "Keyboard",
+    "symbol": "keyboard",
+    "category": "Things",
+    "url": "https://cdn.rainsound.online/sounds/things/keyboard.mp3"
+  },
+  {
+    "id": "typewriter",
+    "name": "Typewriter",
+    "symbol": "typewriter",
+    "category": "Things",
+    "url": "https://cdn.rainsound.online/sounds/things/typewriter.mp3"
+  },
+  {
+    "id": "paper",
+    "name": "Paper",
+    "symbol": "paper",
+    "category": "Things",
+    "url": "https://cdn.rainsound.online/sounds/things/paper.mp3"
+  },
+  {
+    "id": "clock",
+    "name": "Clock",
+    "symbol": "clock",
+    "category": "Things",
+    "url": "https://cdn.rainsound.online/sounds/things/clock.mp3"
+  },
+  {
+    "id": "wind-chimes",
+    "name": "Wind Chimes",
+    "symbol": "wind-chimes",
+    "category": "Things",
+    "url": "https://cdn.rainsound.online/sounds/things/wind-chimes.mp3"
+  },
+  {
+    "id": "singing-bowl",
+    "name": "Singing Bowl",
+    "symbol": "singing-bowl",
+    "category": "Things",
+    "url": "https://cdn.rainsound.online/sounds/things/singing-bowl.mp3"
+  },
+  {
+    "id": "ceiling-fan",
+    "name": "Ceiling Fan",
+    "symbol": "ceiling-fan",
+    "category": "Things",
+    "url": "https://cdn.rainsound.online/sounds/things/ceiling-fan.mp3"
+  },
+  {
+    "id": "dryer",
+    "name": "Dryer",
+    "symbol": "dryer",
+    "category": "Things",
+    "url": "https://cdn.rainsound.online/sounds/things/dryer.mp3"
+  },
+  {
+    "id": "slide-projector",
+    "name": "Slide Projector",
+    "symbol": "slide-projector",
+    "category": "Things",
+    "url": "https://cdn.rainsound.online/sounds/things/slide-projector.mp3"
+  },
+  {
+    "id": "bubbles",
+    "name": "Bubbles",
+    "symbol": "bubbles",
+    "category": "Things",
+    "url": "https://cdn.rainsound.online/sounds/things/bubbles.mp3"
+  },
+  {
+    "id": "morse-code",
+    "name": "Morse Code",
+    "symbol": "morse-code",
+    "category": "Things",
+    "url": "https://cdn.rainsound.online/sounds/things/morse-code.mp3"
+  },
+  {
+    "id": "washing-machine",
+    "name": "Washing Machine",
+    "symbol": "washing-machine",
+    "category": "Things",
+    "url": "https://cdn.rainsound.online/sounds/things/washing-machine.mp3"
+  },
+  {
+    "id": "vinyl-effect",
+    "name": "Vinyl Effect",
+    "symbol": "vinyl-effect",
+    "category": "Things",
+    "url": "https://cdn.rainsound.online/sounds/things/vinyl-effect.mp3"
+  },
+  {
+    "id": "windshield-wipers",
+    "name": "Windshield Wipers",
+    "symbol": "windshield-wipers",
+    "category": "Things",
+    "url": "https://cdn.rainsound.online/sounds/things/windshield-wipers.mp3"
+  }
+]

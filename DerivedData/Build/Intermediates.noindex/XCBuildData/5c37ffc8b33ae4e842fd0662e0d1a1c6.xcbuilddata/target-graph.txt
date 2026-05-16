@@ -1,0 +1,2 @@
+Target dependency graph (1 target)
+Target 'WhiteNoisePlayer' in project 'WhiteNoisePlayer' (no dependencies)

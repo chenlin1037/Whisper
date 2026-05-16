@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "dryer.pdf",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
