@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "windshield-wipers.pdf",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
