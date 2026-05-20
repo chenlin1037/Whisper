@@ -1,0 +1,15 @@
+{
+  "originHash" : "4a2d7db2f69c0c36446ca369c70081cf8f2088a6c69746e22ec30590e679e1ea",
+  "pins" : [
+    {
+      "identity" : "whitenoisesdk",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/chenlin1037/WhiteNoiseSDK.git",
+      "state" : {
+        "revision" : "8dceeaeb6cfed178ff93b0b6150f38a179e117a0",
+        "version" : "1.0.3"
+      }
+    }
+  ],
+  "version" : 3
+}

@@ -1,5 +1,6 @@
 import Combine
 import SwiftUI
+import WhiteNoiseSDK
 
 @MainActor
 final class PlayerViewModel: ObservableObject {

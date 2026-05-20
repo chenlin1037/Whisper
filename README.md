@@ -186,6 +186,7 @@ Key phrases:
 ## Development Notes
 
 - The app uses `WhiteNoiseEngine` as the central audio engine.
+- See `docs/EngineKitGuide.md` for guidance on reusing the engine as an internal Audio Engine Kit in future projects.
 - `PlayerViewModel` exposes playback state and user intents to SwiftUI views.
 - `CollectionStore` and `MixLibraryStore` persist user data with SwiftData.
 - `NetworkLoader` downloads audio files and stores them through `AudioCache`.

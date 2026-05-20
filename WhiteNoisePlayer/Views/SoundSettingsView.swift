@@ -8,6 +8,7 @@
 // 声音设置：各部分的音量
 
 import SwiftUI
+import WhiteNoiseSDK
 
 struct SoundSettingsView: View {
     @EnvironmentObject var vm: PlayerViewModel
@@ -162,8 +163,19 @@ struct SaveMixSheetView: View {
 
 struct VolumeSliderRow: View {
     @ObservedObject var track: AudioTrack
-    let engine: WhiteNoiseEngine // 新增，用来调音量
+    let engine: WhiteNoiseEngine
     let allSounds = SoundDataManager.shared.sounds
+
+    // 本地显示值，跟随手势实时更新（不触发引擎）
+    @State private var localVolume: Double
+    // 防抖任务句柄
+    @State private var debounceTask: DispatchWorkItem?
+
+    init(track: AudioTrack, engine: WhiteNoiseEngine) {
+        self.track = track
+        self.engine = engine
+        _localVolume = State(initialValue: Double(track.volume))
+    }
 
     private var sound: Sound? {
         allSounds.first { $0.id == track.id }
@@ -173,10 +185,6 @@ struct VolumeSliderRow: View {
         sound?.name ?? track.id
     }
 
-    private var symbol: String {
-        sound?.symbol ?? "speaker.wave.2.fill"
-    }
-
     var body: some View {
         HStack(spacing: 8) {
             Text(displayName)
@@ -184,20 +192,38 @@ struct VolumeSliderRow: View {
                 .fontWeight(.medium)
             Spacer()
 
-            Slider(
-                value: Binding(
-                    get: { Double(track.volume) },
-                    set: { engine.setVolume(Float($0), for: track.id, fade: 0.1) } // 改这里
-                ),
-                in: 0 ... 1
-            )
+            Slider(value: $localVolume, in: 0 ... 1)
+                .onChange(of: localVolume) { oldValue, newValue in
+                    scheduleVolumeUpdate(newValue)
+                }
 
-            Text("\(Int(track.volume * 100))%")
+            Text("\(Int(localVolume * 100))%")
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 .monospacedDigit()
                 .frame(minWidth: 36, alignment: .trailing)
         }
+        // 外部（如切换 Mix）改变 track.volume 时同步本地值
+        .onChange(of: track.volume) { oldValue, newValue in
+            let v = Double(newValue)
+            // 只在差距明显时才同步，避免和防抖产生循环
+            if abs(v - localVolume) > 0.005 {
+                localVolume = v
+            }
+        }
+    }
+
+    private func scheduleVolumeUpdate(_ value: Double) {
+        // 取消上一个待执行的任务
+        debounceTask?.cancel()
+
+        let task = DispatchWorkItem {
+            engine.setVolume(Float(value), for: track.id, fade: 0.1)
+        }
+        debounceTask = task
+
+        // 100ms 后执行
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: task)
     }
 }
 

@@ -8,6 +8,7 @@
 // MARK: - File: SoundCardView.swift
 
 import SwiftUI
+import WhiteNoiseSDK
 
 struct SoundCardView: View {
     let sound: Sound
