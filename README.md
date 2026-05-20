@@ -2,9 +2,15 @@
 
 WhiteNoisePlayer is an iOS white-noise and ambient-sound player built with SwiftUI. This version focuses on a clean listening experience for sleep, focus, relaxation, and noise masking. Users can browse categorized sounds, mix multiple tracks, adjust individual volumes, save favorite combinations, use a sleep timer, and keep playback running in the background.
 
+## Screens 
+
+![home](./Screenshots/home.jpeg)
+
+![collected](./Screenshots/collected.jpeg)
+
 ## Current Version
 
-This release is a feature-complete foundation version. The core audio playback flow, sound library, favorites, mix saving, sleep timer, cache, background playback, and lock-screen controls are already in place. The next product work should focus on onboarding, built-in presets, monetization packaging, and App Store polish.
+This release is a feature-complete foundation version. The core audio playback flow, sound library, favorites, mix saving, sleep timer, cache, background playback, and lock-screen controls are already in place. 
 
 ## Features
 
@@ -49,13 +55,6 @@ Each sound entry includes an id, display name, icon or image symbol, category, a
 
 ```text
 WhiteNoisePlayer/
-├── Engine/
-│   ├── AudioCache.swift
-│   ├── AudioSessionManager.swift
-│   ├── AudioTrack.swift
-│   ├── NetworkLoader.swift
-│   ├── NowPlayingManager.swift
-│   └── WhiteNoiseEngine.swift
 ├── Models/
 │   ├── CollectedSound.swift
 │   ├── Mixsound.swift
@@ -185,7 +184,6 @@ Key phrases:
 
 ## Development Notes
 
-- The app uses `WhiteNoiseEngine` as the central audio engine.
 - See `docs/EngineKitGuide.md` for guidance on reusing the engine as an internal Audio Engine Kit in future projects.
 - `PlayerViewModel` exposes playback state and user intents to SwiftUI views.
 - `CollectionStore` and `MixLibraryStore` persist user data with SwiftData.
